@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
 const countdownEl = document.getElementById("countdown");
 
 let photos = [];
+let stickersOnCanvas = [];
 
 // Turn on camera
 navigator.mediaDevices.getUserMedia({ video: true })
@@ -14,6 +15,7 @@ navigator.mediaDevices.getUserMedia({ video: true })
 
 // Start taking photo
 function startSession(photoCount) {
+    stickersOnCanvas = []
     /**
      * 2 photos: 1 column 2 rows
      * 4 photos: 2 columns 2 rows
@@ -90,7 +92,6 @@ function startSession(photoCount) {
 
 // Adding stickers
 let draggedStickerSrc = null;
-let stickersOnCanvas = [];
 
 // Remember which sticker is being dragged
 document.querySelectorAll(".sticker").forEach(sticker => {
