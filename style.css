@@ -7,11 +7,31 @@ body {
 video {
     width: 320px;
     margin-top: 10px;
+    align-items: center;
 }
 
 canvas {
     margin-top: 20px;
     border: 1px solid grey;
+}
+
+.app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.sticker {
+    width: 60px;
+    cursor: grab;
+}
+
+.stickers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
 }
 
 video {
