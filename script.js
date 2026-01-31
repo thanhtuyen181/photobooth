@@ -32,36 +32,38 @@ function startSession(photoCount) {
         if (currentPhoto >= photoCount) {
             countdownEl.textContent = "✨ Done!";
         return;
-    }
+        }
 
-    let timeLeft = 5;
-    countdownEl.textContent = timeLeft;
-
-    const timer = setInterval(() => {
-        timeLeft--;
+        let timeLeft = 5;
         countdownEl.textContent = timeLeft;
 
-        if (timeLeft === 0) {
-            clearInterval(timer);
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdownEl.textContent = timeLeft;
 
-        const col = currentPhoto % cols;
-        const row = Math.floor(currentPhoto / cols);
+            if (timeLeft === 0) {
+                let snap = new Audio("Sound/snap.mp3");
+                snap.play();
+                
+                clearInterval(timer);
 
-        // Mirror photo draw
-        ctx.save();
-        ctx.scale(-1, 1);
-        ctx.drawImage(
-            video,
-          -((col + 1) * photoWidth),
-          row * photoHeight,
-            photoWidth,
-            photoHeight
-        );
-        ctx.restore();
+                const col = currentPhoto % cols;
+                const row = Math.floor(currentPhoto / cols);
 
-        currentPhoto++;
-        takeNextPhoto();
-        }
-    }, 1000);
+                // Mirror photo draw
+                ctx.save();
+                ctx.scale(-1, 1);
+                ctx.drawImage(video, 
+                    -((col + 1) * photoWidth), 
+                    row * photoHeight, 
+                    photoWidth, 
+                    photoHeight
+                );
+                ctx.restore();
+
+                currentPhoto++;
+                takeNextPhoto();
+            }
+        }, 1000);
     }
 }
