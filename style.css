@@ -1,0 +1,31 @@
+body {
+    font-family: sans-serif;
+    background: #f7f7f7;
+    text-align: center;
+}
+
+video {
+    width: 320px;
+    margin-top: 10px;
+}
+
+canvas {
+    margin-top: 20px;
+}
+
+video {
+    transform: scaleX(-1);
+}
+
+button {
+    margin: 10px;
+    padding: 10px 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#countdown {
+    font-size: 32px;
+    color: #333;
+    margin: 10px;
+}
