@@ -94,11 +94,13 @@ function startSession(photoCount) {
 
 // Adding stickers
 let draggedStickerSrc = null;
+let draggedStickerSize = 0;
 
 // Remember which sticker is being dragged
 document.querySelectorAll(".sticker").forEach(sticker => {
     sticker.addEventListener("dragstart", e => {
         draggedStickerSrc = e.target.src;
+        draggedStickerSize = e.target.clientWidth;
     });
 });
 
@@ -121,9 +123,9 @@ canvas.addEventListener("drop", e => {
     img.onload = () => {
         stickersOnCanvas.push({
             img,
-            x: x-30,
+            x: x-draggedStickerSize / 2,
             y: y-30,
-            size: 60
+            size: draggedStickerSize
         });
 
         redrawCanvas();
