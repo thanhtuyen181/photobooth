@@ -2,6 +2,7 @@ const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
 const countdownEl = document.getElementById("countdown");
+const downloadBtn = document.getElementById("download");
 
 let photos = [];
 let stickersOnCanvas = [];
@@ -15,7 +16,8 @@ navigator.mediaDevices.getUserMedia({ video: true })
 
 // Start taking photo
 function startSession(photoCount) {
-    stickersOnCanvas = []
+    photos = [];
+    stickersOnCanvas = [];
     /**
      * 2 photos: 1 column 2 rows
      * 4 photos: 2 columns 2 rows
@@ -158,4 +160,11 @@ function redrawCanvas() {
     })
 }
 
+// Download the image when button is clicked
+downloadBtn.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.download = "photobooth.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+});
 

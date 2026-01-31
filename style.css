@@ -22,7 +22,7 @@ canvas {
     gap: 30px;
 }
 
-.sticker {
+.sticker:not(.sport_glasses, .black_sunglasses, .horn_band) {
     width: 60px;
     cursor: grab;
 }
@@ -31,7 +31,12 @@ canvas {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 30px;
+}
+
+.sport_glasses, .black_sunglasses, .horn_band {
+    width: 90px;
 }
 
 video {
@@ -43,6 +48,10 @@ button {
     padding: 10px 16px;
     font-size: 16px;
     cursor: pointer;
+}
+
+#download {
+    margin-bottom: 50px;
 }
 
 #countdown {
