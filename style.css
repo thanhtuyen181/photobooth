@@ -36,7 +36,7 @@ body {
 }
 
 .start-screen {
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(1px);
 }
 
 .title-card {
