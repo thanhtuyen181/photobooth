@@ -12,12 +12,14 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
 const countdownEl = document.getElementById("countdown");
 const downloadBtn = document.getElementById("download");
+const addFrameBtn = document.getElementById("add-frame");
 
 let photos = [];
 let stickersOnCanvas = [];
 let cameraStarted = false;
 const BORDER_WIDTH = 20;
 const BORDER_COLOR = "#B5B88C";
+let frameEnabled = false;
 
 function startCamera() {
     if (cameraStarted) return;
@@ -48,10 +50,18 @@ btnInstructions.addEventListener("click", () => showScreen("instruction"));
 btnBack.addEventListener("click", () => showScreen("start"));
 btnStartFromInstructions.addEventListener("click", () => showScreen("photobooth"));
 
+addFrameBtn.addEventListener("click", () => {
+    frameEnabled = !frameEnabled;
+    addFrameBtn.textContent = frameEnabled ? "Remove Frame" : "Add Frame";
+    redrawCanvas();
+});
+
 // Start taking photo
 function startSession(photoCount) {
     photos = [];
     stickersOnCanvas = [];
+    frameEnabled = false;
+    addFrameBtn.textContent = "Add Frame";
     /**
      * 2 photos: 1 column 2 rows
      * 4 photos: 2 columns 2 rows
@@ -185,13 +195,15 @@ function redrawCanvas() {
         );
     });
 
-    const borderWidth = BORDER_WIDTH;
-    const borderColor = BORDER_COLOR;
-    if (borderWidth > 0) {
-        ctx.lineWidth = borderWidth;
-        ctx.strokeStyle = borderColor;
-        const inset = borderWidth / 2;
-        ctx.strokeRect(inset, inset, canvas.width - borderWidth, canvas.height - borderWidth);
+    if (frameEnabled) {
+        const borderWidth = BORDER_WIDTH;
+        const borderColor = BORDER_COLOR;
+        if (borderWidth > 0) {
+            ctx.lineWidth = borderWidth;
+            ctx.strokeStyle = borderColor;
+            const inset = borderWidth / 2;
+            ctx.strokeRect(inset, inset, canvas.width - borderWidth, canvas.height - borderWidth);
+        }
     }
 
     stickersOnCanvas.forEach(sticker => {
@@ -209,7 +221,7 @@ function redrawCanvas() {
 downloadBtn.addEventListener("click", () => {
     const link = document.createElement("a");
     link.download = "photobooth.png";
-    const borderWidth = BORDER_WIDTH;
+    const borderWidth = frameEnabled ? BORDER_WIDTH : 0;
     const borderColor = BORDER_COLOR;
 
     if (borderWidth > 0) {
