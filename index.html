@@ -6,39 +6,69 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <h1>📸 Mini Photobooth</h1>
-
-    <video id="video" autoplay playsinline></video>
-
-    <div class="controls">
-        <button onclick="startSession(2)">2 Photos</button>
-        <button onclick="startSession(4)">4 Photos</button>
-    </div>
-
-    <h2 id="countdown"></h2>
-
-    <div class="app">
-        <div class="stickers">
-            <img src="Sticker/bow.png" draggable="true" class="sticker">
-            <img src="Sticker/cat_back.png" draggable="true" class="sticker">
-            <img src="Sticker/black_sunglasses.PNG" draggable="true" class="sticker black_sunglasses">
-            <img src="Sticker/white_flower.png" draggable="true" class="sticker">
-            <img src="Sticker/horn_band.PNG" draggable="true" class="sticker horn_band">
+    <div id="start-screen" class="screen start-screen active">
+        <div class="title-card">
+            <div class="title-image"></div>
+            <p class="title-text"> Tina's Photobooth</p> 
         </div>
 
-        <canvas id="canvas"></canvas>
-
-        <div class="stickers">
-            <img src="Sticker/dino.png" draggable="true" class="sticker">
-            <img src="Sticker/star.png" draggable="true" class="sticker">
-            <img src="Sticker/heart.png" draggable="true" class="sticker">
-            <img src="Sticker/sport_glasses.PNG" draggable="true" class="sticker sport_glasses">
-            <img src="Sticker/tulips.png" draggable="true" class="sticker">
+        <div class="start-actions">
+            <button id="btn-start">Take Photo</button>
+            <button id="btn-instructions">Instruction</button>
         </div>
     </div>
 
-    <button id="download">Download Photo</button>
+    <div id="instruction-screen" class="screen instruction-screen">
+        <div class="instruction-card">
+            <h2>How It Works</h2>
+            <ul class="instruction-list">
+                <li>Choose 2 or 4 photos to start a session.</li>
+                <li>Pose during the countdown and let the camera snap each shot.</li>
+                <li>Drag stickers onto the canvas to decorate your strip.</li>
+                <li>Click Download Photo to save your creation.</li>
+            </ul>
+        </div>
+
+        <div class="start-actions">
+            <button id="btn-back">Back</button>
+            <button id="btn-start-from-instructions">Take Photo</button>
+        </div>
+    </div>
+
+    <div id="photobooth-screen" class="screen photobooth-screen">
+        <h1>Mini Photobooth </h1>
+
+        <video id="video" autoplay playsinline></video>
+
+        <div class="controls">
+            <button onclick="startSession(2)">2 Photos</button>
+            <button onclick="startSession(4)">4 Photos</button>
+        </div>
+
+        <h2 id="countdown"></h2>
+
+        <div class="app">
+            <div class="stickers">
+                <img src="Sticker/bow.png" draggable="true" class="sticker">
+                <img src="Sticker/cat_back.png" draggable="true" class="sticker">
+                <img src="Sticker/black_sunglasses.PNG" draggable="true" class="sticker black_sunglasses">
+                <img src="Sticker/white_flower.png" draggable="true" class="sticker">
+                <img src="Sticker/horn_band.PNG" draggable="true" class="sticker horn_band">
+            </div>
+
+            <canvas id="canvas"></canvas>
+
+            <div class="stickers">
+                <img src="Sticker/dino.png" draggable="true" class="sticker">
+                <img src="Sticker/star.png" draggable="true" class="sticker">
+                <img src="Sticker/heart.png" draggable="true" class="sticker">
+                <img src="Sticker/sport_glasses.PNG" draggable="true" class="sticker sport_glasses">
+                <img src="Sticker/tulips.png" draggable="true" class="sticker">
+            </div>
+        </div>
+
+        <button id="download">Download Photo</button>
+    </div>
 
     <script src="script.js"></script>
 </body>

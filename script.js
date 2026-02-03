@@ -1,3 +1,12 @@
+const startScreen = document.getElementById("start-screen");
+const instructionScreen = document.getElementById("instruction-screen");
+const photoboothScreen = document.getElementById("photobooth-screen");
+
+const btnStart = document.getElementById("btn-start");
+const btnInstructions = document.getElementById("btn-instructions");
+const btnBack = document.getElementById("btn-back");
+const btnStartFromInstructions = document.getElementById("btn-start-from-instructions");
+
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
@@ -6,13 +15,36 @@ const downloadBtn = document.getElementById("download");
 
 let photos = [];
 let stickersOnCanvas = [];
+let cameraStarted = false;
 
-// Turn on camera
-navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => video.srcObject = stream)
-    .catch(err => {
-        alert("Camera access denied 😢");
-    });
+function startCamera() {
+    if (cameraStarted) return;
+    cameraStarted = true;
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => video.srcObject = stream)
+        .catch(() => {
+            alert("Camera access denied.");
+        });
+}
+
+function showScreen(target) {
+    startScreen.classList.remove("active");
+    instructionScreen.classList.remove("active");
+    photoboothScreen.classList.remove("active");
+
+    if (target === "start") startScreen.classList.add("active");
+    if (target === "instruction") instructionScreen.classList.add("active");
+    if (target === "photobooth") {
+        photoboothScreen.classList.add("active");
+        startCamera();
+    }
+}
+
+btnStart.addEventListener("click", () => showScreen("photobooth"));
+btnInstructions.addEventListener("click", () => showScreen("instruction"));
+btnBack.addEventListener("click", () => showScreen("start"));
+btnStartFromInstructions.addEventListener("click", () => showScreen("photobooth"));
 
 // Start taking photo
 function startSession(photoCount) {
@@ -37,8 +69,8 @@ function startSession(photoCount) {
 
     function takeNextPhoto() {
         if (currentPhoto >= photoCount) {
-            countdownEl.textContent = "✨ Done!";
-        return;
+            countdownEl.textContent = "Done!";
+            return;
         }
 
         let timeLeft = 5;
@@ -51,7 +83,7 @@ function startSession(photoCount) {
             if (timeLeft === 0) {
                 let snap = new Audio("Sound/snap.mp3");
                 snap.play();
-                
+
                 clearInterval(timer);
 
                 const col = currentPhoto % cols;
@@ -107,7 +139,7 @@ document.querySelectorAll(".sticker").forEach(sticker => {
 // Allow dropping onto canvas
 canvas.addEventListener("dragover", e => {
     e.preventDefault();
-})
+});
 
 // Drop sticker onto canvas
 canvas.addEventListener("drop", e => {
@@ -123,14 +155,14 @@ canvas.addEventListener("drop", e => {
     img.onload = () => {
         stickersOnCanvas.push({
             img,
-            x: x-draggedStickerSize / 2,
-            y: y-30,
+            x: x - draggedStickerSize / 2,
+            y: y - 30,
             size: draggedStickerSize
         });
 
         redrawCanvas();
     };
-})
+});
 
 function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -149,7 +181,7 @@ function redrawCanvas() {
             photo.width,
             photo.height
         );
-    })
+    });
 
     stickersOnCanvas.forEach(sticker => {
         ctx.drawImage(
@@ -158,8 +190,8 @@ function redrawCanvas() {
             sticker.y,
             sticker.size,
             sticker.size
-        )
-    })
+        );
+    });
 }
 
 // Download the image when button is clicked
@@ -169,4 +201,3 @@ downloadBtn.addEventListener("click", () => {
     link.href = canvas.toDataURL("image/png");
     link.click();
 });
-
