@@ -16,6 +16,8 @@ const downloadBtn = document.getElementById("download");
 let photos = [];
 let stickersOnCanvas = [];
 let cameraStarted = false;
+const BORDER_WIDTH = 20;
+const BORDER_COLOR = "#B5B88C";
 
 function startCamera() {
     if (cameraStarted) return;
@@ -183,6 +185,15 @@ function redrawCanvas() {
         );
     });
 
+    const borderWidth = BORDER_WIDTH;
+    const borderColor = BORDER_COLOR;
+    if (borderWidth > 0) {
+        ctx.lineWidth = borderWidth;
+        ctx.strokeStyle = borderColor;
+        const inset = borderWidth / 2;
+        ctx.strokeRect(inset, inset, canvas.width - borderWidth, canvas.height - borderWidth);
+    }
+
     stickersOnCanvas.forEach(sticker => {
         ctx.drawImage(
             sticker.img,
@@ -198,6 +209,43 @@ function redrawCanvas() {
 downloadBtn.addEventListener("click", () => {
     const link = document.createElement("a");
     link.download = "photobooth.png";
-    link.href = canvas.toDataURL("image/png");
+    const borderWidth = BORDER_WIDTH;
+    const borderColor = BORDER_COLOR;
+
+    if (borderWidth > 0) {
+        const exportCanvas = document.createElement("canvas");
+        exportCanvas.width = canvas.width;
+        exportCanvas.height = canvas.height;
+        const exportCtx = exportCanvas.getContext("2d");
+
+        let allReady = true;
+        photos.forEach(photo => {
+            if (!photo.img || !photo.img.complete) {
+                allReady = false;
+                return;
+            }
+            exportCtx.drawImage(photo.img, photo.x, photo.y, photo.width, photo.height);
+        });
+
+        if (allReady) {
+            // Draw border above photos but below stickers so stickers can overlap it.
+            exportCtx.lineWidth = borderWidth;
+            exportCtx.strokeStyle = borderColor;
+            const inset = borderWidth / 2;
+            exportCtx.strokeRect(inset, inset, canvas.width - borderWidth, canvas.height - borderWidth);
+
+            stickersOnCanvas.forEach(sticker => {
+                if (!sticker.img || !sticker.img.complete) {
+                    allReady = false;
+                    return;
+                }
+                exportCtx.drawImage(sticker.img, sticker.x, sticker.y, sticker.size, sticker.size);
+            });
+        }
+
+        link.href = allReady ? exportCanvas.toDataURL("image/png") : canvas.toDataURL("image/png");
+    } else {
+        link.href = canvas.toDataURL("image/png");
+    }
     link.click();
 });
