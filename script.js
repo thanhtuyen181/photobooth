@@ -8,14 +8,21 @@ const btnBack = document.getElementById("btn-back");
 const btnStartFromInstructions = document.getElementById("btn-start-from-instructions");
 
 const video = document.getElementById("video");
+const countdownEl = document.getElementById("countdown");
+const addFrameBtn = document.getElementById("add-frame");
+const downloadBtn = document.getElementById("download");
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
-const countdownEl = document.getElementById("countdown");
-const downloadBtn = document.getElementById("download");
-const addFrameBtn = document.getElementById("add-frame");
 
 let photos = [];
-let stickersOnCanvas = [];
+let stickersOnCanvas = [];  // store stickers as objects
+
+let selectedSticker = null;
+let offsetX = 0;
+let offsetY = 0;
+
+
 let cameraStarted = false;
 const BORDER_WIDTH = 20;
 const BORDER_COLOR = "#B5B88C";
@@ -175,6 +182,59 @@ canvas.addEventListener("drop", e => {
         redrawCanvas();
     };
 });
+
+canvas.addEventListener("mousedown", e => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    for (let i = stickersOnCanvas.length - 1; i >= 0; i--) {
+        const sticker = stickersOnCanvas[i];
+        if (isInsideSticker(x, y, sticker)) {
+            selectedSticker = sticker;
+            offsetX = x - sticker.x;
+            offsetY = y - sticker.y;
+
+            // bring sticker to front
+            stickersOnCanvas.splice(i, 1);
+            stickersOnCanvas.push(sticker);
+
+            redrawCanvas();
+            break;
+        }
+    }
+});
+
+canvas.addEventListener("mousemove", e => {
+    if (!selectedSticker) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    selectedSticker.x = x - offsetX;
+    selectedSticker.y = y - offsetY;
+
+    redrawCanvas();
+});
+
+canvas.addEventListener("mouseup", () => {
+    selectedSticker = null;
+});
+
+canvas.addEventListener("mouseleave", () => {
+    selectedSticker = null;
+});
+
+// Check if mouse is inside a sticker
+function isInsideSticker(x, y, sticker) {
+    return (
+        x >= sticker.x &&
+        x <= sticker.x + sticker.size && 
+        y >= sticker.y &&
+        y <= sticker.y + sticker.size
+    );
+}
 
 function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
