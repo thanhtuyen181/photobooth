@@ -1,3 +1,6 @@
+// =====================
+// DOM REFERENCES
+// =====================
 const startScreen = document.getElementById("start-screen");
 const instructionScreen = document.getElementById("instruction-screen");
 const photoboothScreen = document.getElementById("photobooth-screen");
@@ -15,6 +18,9 @@ const downloadBtn = document.getElementById("download");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
 
+// =====================
+// STATE
+// =====================
 let photos = [];
 let stickersOnCanvas = [];  // store stickers as objects
 
@@ -22,23 +28,29 @@ let selectedSticker = null;
 let offsetX = 0;
 let offsetY = 0;
 
+let draggedStickerSrc = null;
+let draggedStickerSize = 0;
 
 let cameraStarted = false;
-const BORDER_WIDTH = 20;
-const BORDER_COLOR = "#B5B88C";
 let frameEnabled = false;
 
-function startCamera() {
-    if (cameraStarted) return;
-    cameraStarted = true;
+// =====================
+// CONFIG
+// =====================
+const BORDER_WIDTH = 20;
+const BORDER_COLOR = "#B5B88C";
 
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => video.srcObject = stream)
-        .catch(() => {
-            alert("Camera access denied.");
-        });
-}
+// =====================
+// INITIALIZATION
+// =====================
+btnStart.addEventListener("click", () => showScreen("photobooth"));
+btnInstructions.addEventListener("click", () => showScreen("instruction"));
+btnBack.addEventListener("click", () => showScreen("start"));
+btnStartFromInstructions.addEventListener("click", () => showScreen("photobooth"));
 
+// =====================
+// SCREEN LOGIC
+// =====================
 function showScreen(target) {
     startScreen.classList.remove("active");
     instructionScreen.classList.remove("active");
@@ -52,18 +64,20 @@ function showScreen(target) {
     }
 }
 
-btnStart.addEventListener("click", () => showScreen("photobooth"));
-btnInstructions.addEventListener("click", () => showScreen("instruction"));
-btnBack.addEventListener("click", () => showScreen("start"));
-btnStartFromInstructions.addEventListener("click", () => showScreen("photobooth"));
+// =============================
+// CAMERA & PHOTO SESSION LOGIC
+// =============================
+function startCamera() {
+    if (cameraStarted) return;
+    cameraStarted = true;
 
-addFrameBtn.addEventListener("click", () => {
-    frameEnabled = !frameEnabled;
-    addFrameBtn.textContent = frameEnabled ? "Remove Frame" : "Add Frame";
-    redrawCanvas();
-});
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => video.srcObject = stream)
+        .catch(() => {
+            alert("Camera access denied.");
+        });
+}
 
-// Start taking photo
 function startSession(photoCount) {
     photos = [];
     stickersOnCanvas = [];
@@ -143,9 +157,9 @@ function startSession(photoCount) {
     }
 }
 
-// Adding stickers
-let draggedStickerSrc = null;
-let draggedStickerSize = 0;
+// =====================
+// STICKERS LOGIC
+// =====================
 
 // Remember which sticker is being dragged
 document.querySelectorAll(".sticker").forEach(sticker => {
@@ -153,6 +167,16 @@ document.querySelectorAll(".sticker").forEach(sticker => {
         draggedStickerSrc = e.target.src;
         draggedStickerSize = e.target.clientWidth;
     });
+});
+
+// =====================
+// CANVAS INTERACTION
+// =====================
+
+addFrameBtn.addEventListener("click", () => {
+    frameEnabled = !frameEnabled;
+    addFrameBtn.textContent = frameEnabled ? "Remove Frame" : "Add Frame";
+    redrawCanvas();
 });
 
 // Allow dropping onto canvas
@@ -226,16 +250,9 @@ canvas.addEventListener("mouseleave", () => {
     selectedSticker = null;
 });
 
-// Check if mouse is inside a sticker
-function isInsideSticker(x, y, sticker) {
-    return (
-        x >= sticker.x &&
-        x <= sticker.x + sticker.size && 
-        y >= sticker.y &&
-        y <= sticker.y + sticker.size
-    );
-}
-
+// =====================
+// RENDERING
+// =====================
 function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -276,6 +293,20 @@ function redrawCanvas() {
         );
     });
 }
+
+// Check if mouse is inside a sticker
+function isInsideSticker(x, y, sticker) {
+    return (
+        x >= sticker.x &&
+        x <= sticker.x + sticker.size && 
+        y >= sticker.y &&
+        y <= sticker.y + sticker.size
+    );
+}
+
+// =====================
+// EXPORT
+// =====================
 
 // Download the image when button is clicked
 downloadBtn.addEventListener("click", () => {
