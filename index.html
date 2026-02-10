@@ -47,26 +47,21 @@
             <button onclick="startSession(4)">4 Photos</button>
         </div>
 
+        <div class="sticker-panel">
+            <div class="sticker-tabs">
+                <button data-category="basic">Basic</button>
+                <button data-category="tet">Tet</button>
+            </div>
+        </div>
+
         <h2 id="countdown"></h2>
 
         <div class="app">
-            <div id="basic-sticker" class="stickers">
-                <img src="Sticker/Basic/bow.png" draggable="true" class="sticker">
-                <img src="Sticker/Basic/cat_back.png" draggable="true" class="sticker">
-                <img src="Sticker/Basic/black_sunglasses.PNG" draggable="true" class="sticker black_sunglasses">
-                <img src="Sticker/Basic/white_flower.png" draggable="true" class="sticker">
-                <img src="Sticker/Basic/horn_band.PNG" draggable="true" class="sticker horn_band">
-            </div>
+            <div id="sticker-container1" class="stickers"></div> 
 
             <canvas id="canvas"></canvas>
 
-            <div id="basic-sticker" class="stickers">
-                <img src="Sticker/Basic/dino.png" draggable="true" class="sticker">
-                <img src="Sticker/Basic/star.png" draggable="true" class="sticker">
-                <img src="Sticker/Basic/heart.png" draggable="true" class="sticker">
-                <img src="Sticker/Basic/sport_glasses.PNG" draggable="true" class="sticker sport_glasses">
-                <img src="Sticker/Basic/tulip.PNG" draggable="true" class="sticker">
-            </div>
+            <div id="sticker-container2" class="stickers"></div>
         </div>
 
         <button id="add-frame">Add Frame</button>

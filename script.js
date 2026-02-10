@@ -15,6 +15,8 @@ const countdownEl = document.getElementById("countdown");
 const addFrameBtn = document.getElementById("add-frame");
 const downloadBtn = document.getElementById("download");
 
+const basic_sticker = document.getElementById("basic-sticker");
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
 
@@ -24,7 +26,7 @@ const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
 let photos = [];
 let stickersOnCanvas = [];  // store stickers as objects
 
-let selectedSticker = null;
+let selectedSticker = null; // track stickers being selected
 let offsetX = 0;
 let offsetY = 0;
 
@@ -34,12 +36,42 @@ let draggedStickerSize = 0;
 let cameraStarted = false;
 let frameEnabled = false;
 
+let activeStickerCategory = "basic"; // track active sticker category
+
 // =====================
 // CONFIG
 // =====================
 const BORDER_WIDTH = 20;
 const BORDER_COLOR = "#B5B88C";
 const FRAME_PADDING = BORDER_WIDTH;
+
+const STICKER_CATEGORIES = {
+    basic: [
+        "Sticker/Basic/bow.png",
+        "Sticker/Basic/cat_back.png",
+        "Sticker/Basic/black_sunglasses.PNG",
+        "Sticker/Basic/white_flower.png",
+        "Sticker/Basic/horn_band.PNG",
+        "Sticker/Basic/dino.png",
+        "Sticker/Basic/star.png",
+        "Sticker/Basic/heart.png",
+        "Sticker/Basic/sport_glasses.PNG",
+        "Sticker/Basic/tulip.PNG"
+    ],
+
+    tet: [
+        "Sticker/Tet/chung_cake.PNG",
+        "Sticker/Tet/red_envelope.PNG",
+        "Sticker/Tet/firework.PNG",
+        "Sticker/Tet/watermelon.PNG",
+        "Sticker/Tet/peach_flower.PNG",
+        "Sticker/Tet/gold.PNG",
+        "Sticker/Tet/red_lantern.PNG",
+        "Sticker/Tet/money.PNG",
+        "Sticker/Tet/red_flower.PNG",
+        "Sticker/Tet/red_fireworks.PNG"
+    ]
+}
 
 // =====================
 // INITIALIZATION
@@ -62,6 +94,7 @@ function showScreen(target) {
     if (target === "photobooth") {
         photoboothScreen.classList.add("active");
         startCamera();
+        renderStickers(activeStickerCategory);
     }
 }
 
@@ -83,7 +116,6 @@ function startSession(photoCount) {
     photos = [];
     stickersOnCanvas = [];
     frameEnabled = false;
-    addFrameBtn.textContent = "Add Frame";
     /**
      * 2 photos: 1 column 2 rows
      * 4 photos: 2 columns 2 rows
@@ -161,6 +193,12 @@ function startSession(photoCount) {
 // =====================
 // STICKERS LOGIC
 // =====================
+document.querySelectorAll(".sticker-tabs button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        activeStickerCategory = btn.dataset.category;
+        renderStickers(activeStickerCategory);
+    })
+})
 
 // Remember which sticker is being dragged
 document.querySelectorAll(".sticker").forEach(sticker => {
@@ -254,6 +292,34 @@ canvas.addEventListener("mouseleave", () => {
 // =====================
 // RENDERING
 // =====================
+function renderStickers(category) {
+    const container1 = document.getElementById("sticker-container1");
+    const container2 = document.getElementById("sticker-container2");
+    const stickers = STICKER_CATEGORIES[category];
+    const halfway = stickers.length / 2;
+    
+    container1.innerHTML = "";
+    container2.innerHTML = "";  
+
+    stickers.forEach((src, index) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.classList.add("sticker");
+        img.draggable = true;
+
+        img.addEventListener("dragstart", () => {
+            draggedStickerSrc = src;
+            draggedStickerSize = img.clientWidth;
+        })
+
+        if (index < halfway) {
+            container1.appendChild(img);
+        } else {
+            container2.appendChild(img);
+        }
+    })
+}
+
 function redrawCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 

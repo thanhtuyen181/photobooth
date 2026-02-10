@@ -126,8 +126,8 @@ canvas {
     flex-wrap: wrap;
 }
 
-.sticker:not(.sport_glasses, .black_sunglasses, .horn_band) {
-    width: 60px;
+.sticker {
+    width: 65px;
     cursor: grab;
 }
 
@@ -137,10 +137,6 @@ canvas {
     justify-content: center;
     align-items: center;
     gap: 30px;
-}
-
-.sport_glasses, .black_sunglasses, .horn_band {
-    width: 90px;
 }
 
 button {
