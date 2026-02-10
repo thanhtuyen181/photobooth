@@ -168,7 +168,7 @@ button:hover {
 
 #download {
     margin-bottom: 50px;
-    margin-top: 0px;
+    margin-top: 50px;
 }
 
 #countdown {
@@ -176,6 +176,40 @@ button:hover {
     color: #333;
     margin: 10px;
 }
+
+/* FRAME COLOR*/
+.frame-colors {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.frame-colors.hidden {
+    display: none;
+}
+
+.frame-color {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ccc;
+}
+
+.frame-color:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px var(--accent);
+}
+
+.frame-color[data-color="pastel_red"] { background: #e35d6a; }
+.frame-color[data-color="pastel_pink"] { background: #ffb3ba; }
+.frame-color[data-color="pastel_orange"]   { background: #ffdfba; }
+.frame-color[data-color="pastel_yellow"] { background: #edcf6f; }
+.frame-color[data-color="pastel_green"] { background: #bfc76c; }
+.frame-color[data-color="pastel_blue"] { background: #bae1ff; }
+.frame-color[data-color="pastel_purple"] { background: #e0d6ff; }
+.frame-color[data-color="brown"] { background: #8D6E63; }
+.frame-color[data-color="black"] { background: #101218; }
 
 @media (max-width: 640px) {
     .instruction-card {

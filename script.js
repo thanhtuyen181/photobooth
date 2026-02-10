@@ -15,7 +15,7 @@ const countdownEl = document.getElementById("countdown");
 const addFrameBtn = document.getElementById("add-frame");
 const downloadBtn = document.getElementById("download");
 
-const basic_sticker = document.getElementById("basic-sticker");
+const frameColorsEl = document.getElementById("frame-colors");
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");    // A paintbrush for the canvas
@@ -38,11 +38,23 @@ let frameEnabled = false;
 
 let activeStickerCategory = "basic"; // track active sticker category
 
+let frameColor = "#8D6E63";
 // =====================
 // CONFIG
 // =====================
-const BORDER_WIDTH = 20;
-const BORDER_COLOR = "#B5B88C";
+const BORDER_WIDTH = 15;
+const FRAME_COLORS = {
+    pastel_red: "#e35d6a",
+    pastel_pink: "#ffb3ba",
+    pastel_orange: "#ffdfba",
+    pastel_yellow: "#edcf6f",
+    pastel_green: "#bfc76c",
+    pastel_blue: "#bae1ff",
+    pastel_purple: "#e0d6ff",
+    brown: "#8D6E63",
+    black: "#101218"
+};
+
 const FRAME_PADDING = BORDER_WIDTH;
 
 const STICKER_CATEGORIES = {
@@ -209,12 +221,35 @@ document.querySelectorAll(".sticker").forEach(sticker => {
 });
 
 // =====================
+// FRAME LOGIC
+// =====================
+document.querySelectorAll(".frame-color").forEach(circle => {
+    circle.addEventListener("click", () => {
+        const colorKey = circle.dataset.color;
+        frameColor = FRAME_COLORS[colorKey];
+
+        frameEnabled = true;
+        addFrameBtn.textContent = "Remove Frame";
+
+        redrawCanvas();
+    })
+})
+
+// =====================
 // CANVAS INTERACTION
 // =====================
 
 addFrameBtn.addEventListener("click", () => {
     frameEnabled = !frameEnabled;
-    addFrameBtn.textContent = frameEnabled ? "Remove Frame" : "Add Frame";
+
+    if (frameEnabled) {
+        addFrameBtn.textContent = "Remove Frame";
+        frameColorsEl.classList.remove("hidden");
+    } else {
+        addFrameBtn.textContent = "Add Frame";
+        frameColorsEl.classList.add("hidden");
+    }
+
     redrawCanvas();
 });
 
@@ -341,7 +376,7 @@ function redrawCanvas() {
 
     if (frameEnabled) {
             ctx.lineWidth = BORDER_WIDTH;
-            ctx.strokeStyle = BORDER_COLOR;
+            ctx.strokeStyle = frameColor;
             const inset = BORDER_WIDTH / 2;
             ctx.strokeRect(inset, inset, canvas.width - BORDER_WIDTH, canvas.height - BORDER_WIDTH);
     }
@@ -376,7 +411,7 @@ downloadBtn.addEventListener("click", () => {
     const link = document.createElement("a");
     link.download = "photobooth.png";
     const borderWidth = frameEnabled ? BORDER_WIDTH : 0;
-    const borderColor = BORDER_COLOR;
+    const borderColor = frameColor;
 
     if (borderWidth > 0) {
         const exportCanvas = document.createElement("canvas");
