@@ -2,7 +2,7 @@
 
 :root {
     --ink: #616163;
-    --cream: #fdf9ee;
+    --cream: #fdf6e8;
     --card: rgba(255, 255, 255, 0.86);
     --accent: #caaf97;
     --accent-dark: #9e4f46;
@@ -115,8 +115,7 @@ video {
 
 canvas {
     margin-top: 20px;
-    border-radius: 10px;
-    background: var(--card);
+    background: var(--cream);
 }
 
 .app {

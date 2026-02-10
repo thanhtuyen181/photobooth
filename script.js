@@ -39,6 +39,7 @@ let frameEnabled = false;
 // =====================
 const BORDER_WIDTH = 20;
 const BORDER_COLOR = "#B5B88C";
+const FRAME_PADDING = BORDER_WIDTH;
 
 // =====================
 // INITIALIZATION
@@ -93,8 +94,8 @@ function startSession(photoCount) {
     const photoWidth = 320;
     const photoHeight = 240;
 
-    canvas.width = cols * photoWidth;
-    canvas.height = rows * photoHeight;
+    canvas.width = cols * photoWidth + FRAME_PADDING * 2;
+    canvas.height = rows * photoHeight + FRAME_PADDING * 2;
 
     let currentPhoto = 0;
 
@@ -144,8 +145,8 @@ function startSession(photoCount) {
 
                 photos.push({
                     img: img,
-                    x: col * photoWidth,
-                    y: row * photoHeight,
+                    x: col * photoWidth + FRAME_PADDING,
+                    y: row * photoHeight + FRAME_PADDING,
                     width: photoWidth,
                     height: photoHeight
                 });
@@ -273,14 +274,10 @@ function redrawCanvas() {
     });
 
     if (frameEnabled) {
-        const borderWidth = BORDER_WIDTH;
-        const borderColor = BORDER_COLOR;
-        if (borderWidth > 0) {
-            ctx.lineWidth = borderWidth;
-            ctx.strokeStyle = borderColor;
-            const inset = borderWidth / 2;
-            ctx.strokeRect(inset, inset, canvas.width - borderWidth, canvas.height - borderWidth);
-        }
+            ctx.lineWidth = BORDER_WIDTH;
+            ctx.strokeStyle = BORDER_COLOR;
+            const inset = BORDER_WIDTH / 2;
+            ctx.strokeRect(inset, inset, canvas.width - BORDER_WIDTH, canvas.height - BORDER_WIDTH);
     }
 
     stickersOnCanvas.forEach(sticker => {
